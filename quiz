@@ -1,0 +1,739 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>補充品小測驗｜像MBTI一樣好玩</title>
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:#121b2e;
+      --card2:#0f1729;
+      --txt:#e9eefc;
+      --muted:#a9b5d6;
+      --line:#223055;
+      --accent:#7c5cff;
+      --accent2:#1ee3cf;
+      --warn:#ffcc66;
+      --ok:#7dff9e;
+      --danger:#ff6b7a;
+      --shadow: 0 18px 40px rgba(0,0,0,.35);
+      --r: 18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", Arial;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(124,92,255,.22), transparent 60%),
+                  radial-gradient(900px 500px at 90% 20%, rgba(30,227,207,.18), transparent 55%),
+                  linear-gradient(180deg, #070b14, var(--bg));
+      color:var(--txt);
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:28px 14px;
+    }
+    a{color:inherit}
+    .wrap{width:min(980px, 100%);}
+    header{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:14px; margin-bottom:16px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px;
+    }
+    .logo{
+      width:46px; height:46px; border-radius:14px;
+      background: linear-gradient(135deg, rgba(124,92,255,.95), rgba(30,227,207,.9));
+      box-shadow: 0 12px 30px rgba(124,92,255,.25);
+      display:grid; place-items:center;
+      position:relative; overflow:hidden;
+    }
+    .logo::after{
+      content:"";
+      position:absolute; inset:-30px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), transparent 50%);
+      transform: rotate(22deg);
+    }
+    .logo span{font-size:22px; position:relative}
+    .title h1{margin:0; font-size:18px; letter-spacing:.2px}
+    .title p{margin:2px 0 0; color:var(--muted); font-size:13px}
+    .pill{
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.09);
+      padding:10px 12px;
+      border-radius:999px;
+      color:var(--muted);
+      font-size:12px;
+      display:flex; align-items:center; gap:8px;
+    }
+    .pill b{color:var(--txt); font-weight:700}
+    .grid{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap:16px;
+    }
+    @media (max-width: 860px){
+      .grid{grid-template-columns:1fr;}
+    }
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card .inner{padding:18px;}
+    .progress{
+      height:10px; background: rgba(255,255,255,.08);
+      border-radius:999px; overflow:hidden;
+      border:1px solid rgba(255,255,255,.09);
+      margin-bottom:14px;
+    }
+    .bar{
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius:999px;
+      transition: width .35s ease;
+    }
+    .qtop{display:flex; align-items:flex-start; justify-content:space-between; gap:10px;}
+    .qmeta{color:var(--muted); font-size:12px; margin:0 0 6px}
+    .qtext{margin:0 0 14px; font-size:20px; line-height:1.25}
+    .avatar{
+      width:96px; height:96px; border-radius:24px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.2), transparent 55%),
+                  linear-gradient(135deg, rgba(124,92,255,.22), rgba(30,227,207,.14));
+      border:1px solid rgba(255,255,255,.10);
+      display:grid; place-items:center;
+      font-size:48px;
+      flex: 0 0 auto;
+      transform: rotate(-2deg);
+    }
+
+    .answers{display:grid; gap:10px; margin-top:10px;}
+    .btn{
+      width:100%;
+      text-align:left;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      color:var(--txt);
+      padding:14px 14px;
+      border-radius: 16px;
+      cursor:pointer;
+      transition: transform .08s ease, background .2s ease, border-color .2s ease;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+    }
+    .btn:hover{
+      background: rgba(255,255,255,.09);
+      border-color: rgba(255,255,255,.16);
+      transform: translateY(-1px);
+    }
+    .btn:active{transform: translateY(0px) scale(.995);}
+    .optTag{
+      font-size:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      background: rgba(124,92,255,.18);
+      border:1px solid rgba(124,92,255,.24);
+      color:#d8d2ff;
+      white-space:nowrap;
+    }
+
+    .side{
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+    }
+    .side h3{margin:0 0 8px; font-size:14px; color:var(--muted); font-weight:600;}
+    .chipRow{display:flex; flex-wrap:wrap; gap:8px; margin:10px 0 16px;}
+    .chip{
+      padding:8px 10px;
+      border-radius:999px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.09);
+      font-size:12px;
+      color:var(--muted);
+    }
+    .mini{
+      display:grid; gap:10px;
+      padding:14px;
+      border-radius:16px;
+      background: rgba(0,0,0,.18);
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .mini strong{font-size:14px;}
+    .mini p{margin:0; color:var(--muted); font-size:12px; line-height:1.45}
+
+    .navRow{display:flex; gap:10px; margin-top:14px;}
+    .ghost{
+      background: transparent;
+      border:1px solid rgba(255,255,255,.12);
+      color:var(--muted);
+    }
+    .primary{
+      background: linear-gradient(90deg, rgba(124,92,255,.95), rgba(30,227,207,.8));
+      border: none;
+      box-shadow: 0 14px 30px rgba(124,92,255,.20);
+    }
+    .primary .optTag{
+      background: rgba(255,255,255,.18);
+      border-color: rgba(255,255,255,.22);
+      color: rgba(10,15,30,.9);
+      font-weight:700;
+    }
+
+    /* Result */
+    .resultHero{
+      display:flex; align-items:center; justify-content:space-between; gap:14px;
+      padding:18px;
+      background: linear-gradient(135deg, rgba(124,92,255,.18), rgba(30,227,207,.12));
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+    .resultHero h2{margin:0; font-size:18px;}
+    .badge{
+      padding:8px 10px; border-radius:999px;
+      background: rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.14);
+      color:var(--txt);
+      font-size:12px;
+      white-space:nowrap;
+    }
+    .stack{display:grid; gap:10px; margin-top:14px;}
+    .prod{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
+      padding:14px;
+      border-radius:16px;
+      background: rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.09);
+    }
+    .prod .left{display:flex; gap:12px; align-items:flex-start;}
+    .prod .ico{
+      width:44px; height:44px; border-radius:14px;
+      display:grid; place-items:center; font-size:22px;
+      background: rgba(124,92,255,.16);
+      border:1px solid rgba(124,92,255,.22);
+    }
+    .prod h4{margin:0; font-size:15px;}
+    .prod p{margin:4px 0 0; color:var(--muted); font-size:12px; line-height:1.45;}
+    .prod .right{
+      text-align:right;
+      display:grid; gap:4px;
+      white-space:nowrap;
+    }
+    .money{font-weight:800;}
+    .small{color:var(--muted); font-size:12px;}
+    table{
+      width:100%;
+      border-collapse: collapse;
+      margin-top:12px;
+      overflow:hidden;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.12);
+    }
+    th,td{padding:10px 10px; font-size:12px; border-bottom:1px solid rgba(255,255,255,.06);}
+    th{color:var(--muted); text-align:left; font-weight:600;}
+    tr:last-child td{border-bottom:none;}
+    .subscribe{
+      display:grid; gap:10px;
+      margin-top:14px;
+      padding:14px;
+      border-radius:16px;
+      background: rgba(0,0,0,.16);
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .row{display:flex; gap:10px; flex-wrap:wrap;}
+    input, select{
+      width:100%;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color:var(--txt);
+      outline:none;
+    }
+    input::placeholder{color: rgba(233,238,252,.45);}
+    .note{
+      color:var(--muted);
+      font-size:12px; line-height:1.45;
+      margin:10px 0 0;
+    }
+    .toast{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(125,255,158,.22);
+      background: rgba(125,255,158,.10);
+      color: rgba(230,255,240,.92);
+      font-size:12px;
+      display:none;
+    }
+    .shake{
+      animation: shake .35s ease;
+    }
+    @keyframes shake{
+      0%{transform:translateX(0)}
+      25%{transform:translateX(-6px)}
+      50%{transform:translateX(6px)}
+      75%{transform:translateX(-3px)}
+      100%{transform:translateX(0)}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo"><span>🧪</span></div>
+        <div class="title">
+          <h1>補充品小遊戲（像 MBTI 一樣）</h1>
+          <p>10 題解鎖你的「補給角色」＋每日補充方案＆費用</p>
+        </div>
+      </div>
+      <div class="pill">
+        <span>目前題數</span> <b id="pillCount">1 / 10</b> <span>｜</span> <span id="pillHint">選一個最像你的</span>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- Main -->
+      <section class="card">
+        <div class="inner" id="main"></div>
+      </section>
+
+      <!-- Side -->
+      <aside class="card side">
+        <div class="inner">
+          <h3>你的「補給雷達」正在掃描…</h3>
+          <div class="chipRow" id="chips"></div>
+
+          <div class="mini">
+            <strong>玩法提示</strong>
+            <p>像玩心理測驗：不要想太久，選「最符合你現在狀態」的答案。</p>
+          </div>
+
+          <div class="mini" style="margin-top:12px;">
+            <strong>合規小字（可自行改）</strong>
+            <p>本測驗僅供生活風格參考，非醫療建議。若有慢性病、懷孕哺乳或正在用藥，請先諮詢專業人員。</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    /***********************
+     * 1) 產品設定（可改價格/用量）
+     ***********************/
+    const PRODUCTS = {
+      b:   { key:"b",   name:"B群",       icon:"⚡", baseDose:"每日 1 粒",   unitPrice:12,  desc:"熬夜、壓力、精神疲勞、想更有續航感。" },
+      fish:{ key:"fish",name:"魚油",       icon:"🐟", baseDose:"每日 1–2 粒", unitPrice:18,  desc:"外食多、少吃魚、在意循環與日常保養。" },
+      nmn: { key:"nmn", name:"NMN",        icon:"⏳", baseDose:"每日 1 粒",   unitPrice:45,  desc:"作息亂、精力易見底、想做長線狀態管理。" },
+      bitter:{key:"bitter",name:"苦瓜胜肽",icon:"🥒", baseDose:"每日 1–2 粒", unitPrice:20,  desc:"手搖/澱粉多、飯後想更穩、在意代謝管理。" },
+      enzyme:{key:"enzyme",name:"酵素錠",  icon:"🍍", baseDose:"餐後 1–2 錠", unitPrice:10,  desc:"聚餐多、消化卡卡、飯後容易脹。" },
+      liver:{key:"liver",name:"護肝",      icon:"🛡️", baseDose:"每日 1 粒",   unitPrice:22,  desc:"應酬/熬夜多、常喝酒、隔天容易疲倦。" },
+    };
+
+    // 你想要「一天多少錢」：這裡用 unitPrice 當作「建議方案的平均每日成本（你可改成更真實的計價）」。
+
+    /***********************
+     * 2) 題庫：10題，每題4選項
+     * 每個選項都會對產品加權（score）
+     ***********************/
+    const QUESTIONS = [
+      {
+        avatar:"🦦", // 可愛角色：每題不同也可以
+        q:"你平常大概幾點睡？",
+        opts:[
+          {t:"22:30 前，我是早睡派", tag:"作息天使", score:{fish:1}},
+          {t:"23:00–00:30，正常範圍", tag:"中性", score:{b:1, fish:1}},
+          {t:"01:00–02:30，熬夜常態", tag:"夜貓", score:{b:2, liver:1}},
+          {t:"03:00 後…我在跟世界拔河", tag:"爆肝戰士", score:{b:3, liver:2, nmn:1}},
+        ]
+      },
+      {
+        avatar:"🐼",
+        q:"你會不會睡睡醒醒、淺眠？",
+        opts:[
+          {t:"幾乎不會，一覺到天亮", tag:"睡神", score:{fish:1}},
+          {t:"偶爾醒一下但能再睡", tag:"可控", score:{fish:1, b:1}},
+          {t:"常醒、腦袋停不下來", tag:"焦慮腦", score:{b:2, nmn:1}},
+          {t:"醒來還會滑手機到天亮", tag:"手機綁架", score:{b:2, nmn:2}},
+        ]
+      },
+      {
+        avatar:"🦊",
+        q:"你早上起床的感覺比較像？",
+        opts:[
+          {t:"醒來就能開機", tag:"秒開機", score:{fish:1}},
+          {t:"需要咖啡/茶才能做人", tag:"咖啡續命", score:{b:2}},
+          {t:"像被卡車輾過", tag:"電量0%", score:{b:2, liver:1}},
+          {t:"明明睡了還是很耗", tag:"長期耗損", score:{nmn:2, b:1}},
+        ]
+      },
+      {
+        avatar:"🐰",
+        q:"你最常遇到的飲食情境是？",
+        opts:[
+          {t:"自煮/清淡居多", tag:"自律型", score:{fish:1}},
+          {t:"外食便當多、菜少", tag:"外食族", score:{fish:2, b:1}},
+          {t:"澱粉+手搖很常見", tag:"糖澱粉黨", score:{bitter:3}},
+          {t:"聚餐應酬多、常晚餐很晚", tag:"社交胃", score:{enzyme:2, liver:1}},
+        ]
+      },
+      {
+        avatar:"🦁",
+        q:"你飯後最常出現的狀況？",
+        opts:[
+          {t:"沒什麼感覺", tag:"平穩", score:{fish:1}},
+          {t:"容易脹、打嗝、卡卡", tag:"消化卡", score:{enzyme:3}},
+          {t:"吃完想躺，昏昏欲睡", tag:"飯後當機", score:{bitter:2, b:1}},
+          {t:"重口味後隔天很疲憊", tag:"代價派", score:{liver:2, enzyme:1}},
+        ]
+      },
+      {
+        avatar:"🐯",
+        q:"你一週喝酒/應酬大概？",
+        opts:[
+          {t:"幾乎不喝", tag:"清醒派", score:{fish:1}},
+          {t:"1 次左右", tag:"偶爾", score:{liver:1}},
+          {t:"2–3 次", tag:"社交型", score:{liver:2, b:1}},
+          {t:"4 次以上（或你不想算）", tag:"硬扛型", score:{liver:3, b:2}},
+        ]
+      },
+      {
+        avatar:"🦄",
+        q:"你最近的狀態比較像哪一句？",
+        opts:[
+          {t:"腦袋很清楚，但身體跟不上", tag:"身心落差", score:{nmn:2}},
+          {t:"事情一多就很煩、很燥", tag:"壓力山大", score:{b:3}},
+          {t:"想顧長線狀態，但懶得複雜", tag:"長線玩家", score:{nmn:2, fish:1}},
+          {t:"我只是想不要那麼累", tag:"求救訊號", score:{b:2, liver:1, nmn:1}},
+        ]
+      },
+      {
+        avatar:"🐻",
+        q:"你的日常活動比較偏？",
+        opts:[
+          {t:"久坐上班/通勤多", tag:"久坐", score:{fish:2}},
+          {t:"常用腦、會爆肝趕進度", tag:"腦力壓榨", score:{b:2, nmn:1}},
+          {t:"輪班/日夜顛倒", tag:"時差人生", score:{b:2, liver:1, nmn:2}},
+          {t:"常跑業務/社交很多", tag:"社交戰士", score:{liver:2, b:1}},
+        ]
+      },
+      {
+        avatar:"🐧",
+        q:"你最想改善的第一名是？",
+        opts:[
+          {t:"精神續航（不要下午死機）", tag:"續航", score:{b:3}},
+          {t:"循環保養（少吃魚的罪惡感）", tag:"循環", score:{fish:3}},
+          {t:"代謝管理（甜食澱粉好難戒）", tag:"代謝", score:{bitter:3}},
+          {t:"消化順（飯後不要再腫一圈）", tag:"消化", score:{enzyme:3}},
+        ]
+      },
+      {
+        avatar:"🦉",
+        q:"最後一題：你願意的補充方式？",
+        opts:[
+          {t:"越少顆越好", tag:"極簡派", score:{nmn:1, fish:1}},
+          {t:"可以 2–3 種，效果要有感", tag:"平衡派", score:{b:1, fish:1, enzyme:1}},
+          {t:"我願意照表操課", tag:"認真派", score:{b:2, fish:1, bitter:1, liver:1}},
+          {t:"我需要有人幫我配好寄來", tag:"訂閱派", score:{b:1, fish:1, nmn:1, bitter:1, enzyme:1, liver:1}},
+        ]
+      },
+    ];
+
+    /***********************
+     * 3) 遊戲狀態
+     ***********************/
+    let idx = 0;
+    let scores = Object.fromEntries(Object.keys(PRODUCTS).map(k => [k, 0]));
+    let picked = []; // 追蹤選了什麼，方便日後做回顧/導購文案
+
+    const main = document.getElementById("main");
+    const chips = document.getElementById("chips");
+    const pillCount = document.getElementById("pillCount");
+
+    function renderChips(){
+      // 顯示目前前3名雷達
+      const sorted = Object.entries(scores).sort((a,b)=>b[1]-a[1]);
+      const top = sorted.slice(0,3);
+      chips.innerHTML = top.map(([k,v])=>{
+        const p = PRODUCTS[k];
+        const level = v >= 9 ? "🔥" : v >= 6 ? "✨" : v >= 3 ? "🙂" : "…";
+        return `<span class="chip">${p.icon} ${p.name} ${level}</span>`;
+      }).join("");
+    }
+
+    function progressPct(){
+      return Math.round((idx / QUESTIONS.length) * 100);
+    }
+
+    function renderQuestion(){
+      const q = QUESTIONS[idx];
+      pillCount.textContent = `${idx+1} / ${QUESTIONS.length}`;
+      renderChips();
+
+      main.innerHTML = `
+        <div class="progress"><div class="bar" style="width:${progressPct()}%"></div></div>
+        <div class="qtop">
+          <div>
+            <p class="qmeta">第 ${idx+1} 題｜選一個最像你的</p>
+            <h2 class="qtext">${q.q}</h2>
+          </div>
+          <div class="avatar" aria-hidden="true">${q.avatar}</div>
+        </div>
+
+        <div class="answers">
+          ${q.opts.map((o,i)=>`
+            <button class="btn" data-i="${i}">
+              <span>${o.t}</span>
+              <span class="optTag">${o.tag}</span>
+            </button>
+          `).join("")}
+        </div>
+
+        <div class="navRow">
+          <button class="btn ghost" id="backBtn" ${idx===0?'disabled':''} style="opacity:${idx===0?.5:1}">
+            <span>⬅️ 上一題</span>
+            <span class="optTag">可回頭</span>
+          </button>
+          <button class="btn primary" id="skipBtn">
+            <span>我不確定（跳過）</span>
+            <span class="optTag">+0 分</span>
+          </button>
+        </div>
+      `;
+
+      // Bind
+      main.querySelectorAll(".btn[data-i]").forEach(btn=>{
+        btn.addEventListener("click", ()=> choose(+btn.dataset.i));
+      });
+      main.querySelector("#skipBtn").addEventListener("click", ()=> choose(null));
+      main.querySelector("#backBtn").addEventListener("click", ()=> goBack());
+    }
+
+    function applyScore(delta){
+      for (const [k,v] of Object.entries(delta || {})){
+        if (scores[k] == null) continue;
+        scores[k] += v;
+      }
+    }
+
+    function choose(optIndex){
+      const q = QUESTIONS[idx];
+
+      // 記錄選擇以便回上一題可回滾
+      let record = { idx, optIndex, delta: null };
+      if (optIndex != null){
+        record.delta = q.opts[optIndex].score || {};
+        applyScore(record.delta);
+      }
+      picked.push(record);
+
+      idx++;
+      if (idx >= QUESTIONS.length){
+        renderResult();
+      }else{
+        renderQuestion();
+      }
+    }
+
+    function goBack(){
+      if (idx <= 0) return;
+
+      // 回到上一題：回滾分數
+      const last = picked.pop();
+      if (last && last.delta){
+        for (const [k,v] of Object.entries(last.delta)){
+          scores[k] -= v;
+        }
+      }
+      idx = Math.max(0, idx-1);
+      renderQuestion();
+    }
+
+    /***********************
+     * 4) 結果頁：選前2~4個推薦
+     ***********************/
+    function pickPlan(){
+      const sorted = Object.entries(scores).sort((a,b)=>b[1]-a[1]);
+      const bestScore = sorted[0][1];
+
+      // 若分數都很低，仍給「基礎保養」組合
+      if (bestScore <= 2){
+        return ["b", "fish"];
+      }
+
+      // 取前3名，但要有基本門檻
+      const top = sorted.filter(([k,v])=>v >= 3).slice(0,4).map(([k])=>k);
+
+      // 保底至少2個
+      if (top.length < 2){
+        top.push(sorted[1][0]);
+      }
+      return Array.from(new Set(top)).slice(0,4);
+    }
+
+    function personaLabel(plan){
+      // 做個 MBTI-like 的可愛稱號
+      const has = (k)=> plan.includes(k);
+      if (has("liver") && has("b")) return {name:"爆肝續命型", emoji:"🧟‍♀️⚡"};
+      if (has("bitter") && has("enzyme")) return {name:"美食代謝型", emoji:"🍜🥒"};
+      if (has("nmn") && has("fish")) return {name:"長線保養型", emoji:"⏳🐟"};
+      if (has("b") && has("fish")) return {name:"上班續航型", emoji:"💼⚡"};
+      return {name:"均衡補給型", emoji:"🧃✨"};
+    }
+
+    function calcDailyCost(plan){
+      return plan.reduce((sum,k)=>sum + (PRODUCTS[k].unitPrice || 0), 0);
+    }
+
+    function renderResult(){
+      const plan = pickPlan();
+      const persona = personaLabel(plan);
+      const daily = calcDailyCost(plan);
+      const monthly = daily * 30;
+
+      pillCount.textContent = `${QUESTIONS.length} / ${QUESTIONS.length}`;
+      renderChips();
+
+      const rows = plan.map(k=>{
+        const p = PRODUCTS[k];
+        return `
+          <div class="prod">
+            <div class="left">
+              <div class="ico">${p.icon}</div>
+              <div>
+                <h4>${p.name}</h4>
+                <p>${p.desc}<br><b style="color:#fff">建議用量：</b>${p.baseDose}</p>
+              </div>
+            </div>
+            <div class="right">
+              <div class="money">$${p.unitPrice} / 天</div>
+              <div class="small">訂閱可自動補貨</div>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      const sortedAll = Object.entries(scores).sort((a,b)=>b[1]-a[1]);
+      const tableRows = sortedAll.map(([k,v])=>{
+        const p = PRODUCTS[k];
+        const bar = Math.min(100, v*10);
+        return `
+          <tr>
+            <td>${p.icon} ${p.name}</td>
+            <td>${v}</td>
+            <td>
+              <div style="height:8px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden;border:1px solid rgba(255,255,255,.08);">
+                <div style="height:100%;width:${bar}%;background:linear-gradient(90deg, rgba(124,92,255,.9), rgba(30,227,207,.75));"></div>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join("");
+
+      main.innerHTML = `
+        <div class="resultHero">
+          <div>
+            <h2>你的角色是：${persona.emoji}「${persona.name}」</h2>
+            <div class="note">以下為生活風格建議（非醫療建議）。若你有疾病、懷孕哺乳、正在用藥，請先諮詢專業人員。</div>
+          </div>
+          <div class="badge">每日預估：<b>$${daily}</b>｜30天：<b>$${monthly}</b></div>
+        </div>
+
+        <div class="inner">
+          <h3 style="margin:0 0 6px;color:var(--muted);font-weight:600;">你的「每日補給方案」</h3>
+          <div class="stack">${rows}</div>
+
+          <table>
+            <thead>
+              <tr><th>補充品雷達</th><th>分數</th><th>強度</th></tr>
+            </thead>
+            <tbody>${tableRows}</tbody>
+          </table>
+
+          <div class="subscribe">
+            <strong>一鍵訂閱（示範版）</strong>
+            <div class="row">
+              <input id="subName" placeholder="姓名" style="flex:1; min-width:180px;">
+              <input id="subPhone" placeholder="手機（可選）" style="flex:1; min-width:180px;">
+            </div>
+            <input id="subAddr" placeholder="寄送地址（示範：台北市…）">
+            <div class="row">
+              <select id="subCycle" style="flex:1; min-width:180px;">
+                <option value="30">每 30 天寄一次</option>
+                <option value="45">每 45 天寄一次</option>
+                <option value="60">每 60 天寄一次</option>
+              </select>
+              <button class="btn primary" id="subBtn" style="flex:1; min-width:180px;">
+                <span>訂閱並寄出我的方案</span>
+                <span class="optTag">GO</span>
+              </button>
+            </div>
+
+            <div class="toast" id="toast">✅ 已收到訂閱資料（示範）。你可以把這裡串接到實際表單/金流/CRM。</div>
+            <div class="note">
+              你可以把「每日費用」改成依照你的實際售價/包裝規格來算（例如：一瓶30粒、售價$XXX → 每日成本=售價/30）。<br>
+              想更像 MBTI：可以再加「副結果」文字，例如「你的致命弱點是：晚睡＋外食」並帶出對應產品組合。
+            </div>
+
+            <div class="navRow" style="margin-top:10px;">
+              <button class="btn ghost" id="restartBtn">
+                <span>🔄 再測一次</span>
+                <span class="optTag">Reset</span>
+              </button>
+              <button class="btn" id="copyBtn">
+                <span>📋 複製結果文案</span>
+                <span class="optTag">Share</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById("subBtn").addEventListener("click", ()=>{
+        const name = document.getElementById("subName");
+        const addr = document.getElementById("subAddr");
+        if(!name.value.trim() || !addr.value.trim()){
+          const box = document.querySelector(".subscribe");
+          box.classList.remove("shake"); void box.offsetWidth; box.classList.add("shake");
+          return;
+        }
+        document.getElementById("toast").style.display = "block";
+      });
+
+      document.getElementById("restartBtn").addEventListener("click", ()=>{
+        idx = 0;
+        scores = Object.fromEntries(Object.keys(PRODUCTS).map(k => [k, 0]));
+        picked = [];
+        document.getElementById("pillHint").textContent = "選一個最像你的";
+        renderQuestion();
+      });
+
+      document.getElementById("copyBtn").addEventListener("click", async ()=>{
+        const text = buildShareText(plan, persona, daily);
+        try{
+          await navigator.clipboard.writeText(text);
+          alert("已複製到剪貼簿！");
+        }catch(e){
+          alert("複製失敗，請手動複製：\n\n" + text);
+        }
+      });
+    }
+
+    function buildShareText(plan, persona, daily){
+      const items = plan.map(k=>{
+        const p = PRODUCTS[k];
+        return `- ${p.name}（${p.baseDose}）`;
+      }).join("\n");
+
+      return `我的補充品角色：${persona.name}\n\n我的每日補給方案：\n${items}\n\n每日預估：$${daily}/天\n（此為生活風格參考，非醫療建議）`;
+    }
+
+    // init
+    renderQuestion();
+  </script>
+</body>
+</html>
